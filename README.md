@@ -1,6 +1,6 @@
-# Analyse du Chiffre d'Affaires des Jeux en Ligne Agréés par l'ANJ en France
+# Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France
 
-## Description du Projet
+## Description du projet
 Ce projet vise à analyser les données sur le chiffre d'affaires généré par les jeux en ligne agréés par l'ANJ en France, incluant les paris sportifs, les paris hippiques et le poker. L'analyse comprend l'extraction, le nettoyage et la visualisation des données afin de comprendre les tendances et les performances du marché des jeux en ligne dans le pays.
 
 ## Installation
