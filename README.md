@@ -8,7 +8,7 @@ Ce projet vise à analyser les données sur le chiffre d'affaires généré par 
 2. Installer les dépendances requises en exécutant `pip install -r requirements.txt`.
 
 ## Utilisation
-1. Télécharger les données à partir de [Données sur le marché des jeux en ligne agréé par l'ANJ](https://www.data.gouv.fr/fr/datasets/donnees-sur-le-marche-des-jeux-en-ligne-paris-sportifs-hippiques-et-poker-de-2010-a-2022/).
+1. Télécharger les données à partir de [Open data ANJ](https://anj.fr/open-data-anj).
 2. Placer les fichiers de données dans le répertoire `data/`.
 3. Exécuter le script `main.py` pour démarrer l'analyse.
    ```bash
@@ -31,4 +31,4 @@ Les principaux résultats de l'analyse sont les suivants :
 
 
 ## Contact
-Pour toute question ou commentaire, veuillez contacter [Gary FOY] à [garyfoy@hotmail.fr].
+Pour toute question ou commentaire, veuillez contacter [Gary FOY](garyfoy@hotmail.fr).
