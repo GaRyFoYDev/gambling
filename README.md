@@ -8,7 +8,7 @@ Ce projet vise à analyser les données sur le chiffre d'affaires généré par 
 2. Installer les dépendances requises en exécutant `pip install -r requirements.txt`.
 
 ## Utilisation
-1. Télécharger les données à partir du site de [Autorité Natinales des Jeux](https://anj.fr/open-data-anj).
+1. Télécharger les données à partir du site de [l'Autorité Nationale des Jeux](https://anj.fr/open-data-anj).
 2. Placer les fichiers de données dans le répertoire `data/`.
 3. Exécuter le script `main.py` pour démarrer l'analyse.
    ```bash
