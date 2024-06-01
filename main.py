@@ -9,15 +9,20 @@
 # Email: gary.foy.auditeur@lecnam.net                                        #
 ##############################################################################
 
-import preprocessing as p
+from preprocessing import clean_gambling_market as df1
+import pandas as pd
+import xlsxwriter
+
+
+def create_excel(df: pd.DataFrame):
+
+    with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
+        df.to_excel(writer, sheet_name='data', index=True)
+
+        wb = writer.book
+        # workbook.add_worksheet('dashboard_1')
+        # workbook.add_worksheet('dashboard_2')
 
 
 if __name__ == '__main__':
-    directory_name = 'data'
-    data_paths = p.getPath(directory_name)
-    most_bet_on_matches = p.createDataset(data_paths, 1)
-
-    gambling_market = p.createDataset(data_paths, 0)
-    clean_gambling_market = p.preprocess_gambling_market_dataset(
-        gambling_market)
-    print(clean_gambling_market)
+    create_excel(df1)

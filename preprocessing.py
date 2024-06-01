@@ -15,7 +15,7 @@ import openpyxl
 from pathlib import Path
 
 
-def getPath(name: str) -> list:
+def get_path(name: str) -> list:
     """The function creates a list of all files in the data directory and returns.
     a list of them.
 
@@ -32,7 +32,7 @@ def getPath(name: str) -> list:
         return data_path
 
 
-def createDataset(paths: list, index: int) -> pd.DataFrame:
+def create_dataset(paths: list, index: int) -> pd.DataFrame:
     """ This function creates a pandas dataframe with the csv file provided.
 
     Args:
@@ -54,7 +54,8 @@ def preprocess_gambling_market_dataset(df: pd.DataFrame) -> pd.DataFrame:
     
     #Set index
     df = df.set_index('Catégorie/Année')
-    
+   
+
     #Transpose table
     df = df.T
     
@@ -64,8 +65,10 @@ def preprocess_gambling_market_dataset(df: pd.DataFrame) -> pd.DataFrame:
     #Get only years from the indexes and replace 
     new_indexes = [date[-4:] for date in df.index ]
     df.index = new_indexes
+  
+    df.index = df.index.astype(int)
     
-    #Rename columns
+
     df = df.rename(columns = {
     'Nombre dopérateurs': 'Nombre opérateurs',
     'Nombre dagréments': 'Nombre agréments',
@@ -78,9 +81,28 @@ def preprocess_gambling_market_dataset(df: pd.DataFrame) -> pd.DataFrame:
     'PBJ poker (en M)': 'PBJ poker (en millions euros)',
     'Budget marketing médias (en M)': 'Budget marketing médias (en millions euros)'})
     
-    #Fill missing values
-    df = df.fillna(0)
+   
+
+
+    for column in df.iloc[:,:18].columns:
+        df[column] = df[column].str.replace(' ','')
+        df[column] = df[column].fillna(0)
+        df[column] = df[column].astype(int)
+
     
+    for column in df.iloc[:,18:].columns:
+        df[column] = df[column].str.replace('%','')
+        df[column] = df[column].fillna(0)
+        df[column] = df[column].astype(float)
+        df[column] = df[column]/100
+
     return df
     
-    
+
+directory_name = 'data'
+data_paths = get_path(directory_name)
+
+gambling_market = create_dataset(data_paths, 0)
+clean_gambling_market = preprocess_gambling_market_dataset(gambling_market)
+
+most_bet_on_matches = create_dataset(data_paths, 1)
