@@ -9,15 +9,19 @@
 # Email: gary.foy.auditeur@lecnam.net                                        #
 ##############################################################################
 
-import dashboard as dash
-import preprocessing as prep
 
-if __name__ == '__main__':
-    
-    directory_name = 'data'
-    data_path = prep.get_path(directory_name)
+import pandas as pd
+import xlsxwriter
 
-    gambling_df = prep.create_dataset(data_path, 0)
-    clean_gambling_df = prep.data_preprocessing(gambling_df)
 
-    dash.create_excel(clean_gambling_df)
+def create_excel(df: pd.DataFrame):
+
+    with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
+        df.to_excel(writer, sheet_name='data', index=True)
+
+        wb = writer.book
+        # workbook.add_worksheet('dashboard_1')
+        # workbook.add_worksheet('dashboard_2')
+
+
+

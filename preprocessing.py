@@ -9,9 +9,7 @@
 # Email: gary.foy.auditeur@lecnam.net                                        #
 ##############################################################################
 
-import numpy as np
 import pandas as pd
-import openpyxl
 from pathlib import Path
 
 
@@ -50,59 +48,56 @@ def create_dataset(paths: list, index: int) -> pd.DataFrame:
         return data
 
 
-def preprocess_gambling_market_dataset(df: pd.DataFrame) -> pd.DataFrame:
-    
-    #Set index
+def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
+
+    # Set index
     df = df.set_index('Catégorie/Année')
-   
 
-    #Transpose table
+    # Transpose table
     df = df.T
-    
-    #Slice df to keep good columns
-    df = df.iloc[:,:33]
-    
-    #Get only years from the indexes and replace 
-    new_indexes = [date[-4:] for date in df.index ]
+
+    # Slice df to keep good columns
+    df = df.iloc[:, :33]
+
+    # Get only years from the indexes and replace
+    new_indexes = [date[-4:] for date in df.index]
     df.index = new_indexes
-  
+
     df.index = df.index.astype(int)
-    
 
-    df = df.rename(columns = {
-    'Nombre dopérateurs': 'Nombre opérateurs',
-    'Nombre dagréments': 'Nombre agréments',
-    'Mises paris sportifs (en M)': 'Mises paris sportifs (en millions euros)',
-    'PBJ paris sportifs (en M)': 'PBJ paris sportifs (en millions euros)',
-    'Mises paris hippiques (en M)' :'Mises paris hippiques (en millions euros)',
-    'PBJ paris hippiques (en M)': 'PBJ paris hippiques (en millions euros)' ,
-    'Mises poker cash game (en M)': 'Mises poker cash game (en millions euros)',
-    "Droits d'entrée en tournois de poker (en M)": "Droits d'entrée en tournois de poker (en millions euros)",
-    'PBJ poker (en M)': 'PBJ poker (en millions euros)',
-    'Budget marketing médias (en M)': 'Budget marketing médias (en millions euros)'})
-    
-   
+    df = df.rename(columns={
+        'Nombre dopérateurs': 'Nombre opérateurs',
+        'Nombre dagréments': 'Nombre agréments',
+        'Mises paris sportifs (en M)': 'Mises paris sportifs (en millions euros)',
+        'PBJ paris sportifs (en M)': 'PBJ paris sportifs (en millions euros)',
+        'Mises paris hippiques (en M)': 'Mises paris hippiques (en millions euros)',
+        'PBJ paris hippiques (en M)': 'PBJ paris hippiques (en millions euros)',
+        'Mises poker cash game (en M)': 'Mises poker cash game (en millions euros)',
+        "Droits d'entrée en tournois de poker (en M)": "Droits d'entrée en tournois de poker (en millions euros)",
+        'PBJ poker (en M)': 'PBJ poker (en millions euros)',
+        'Budget marketing médias (en M)': 'Budget marketing médias (en millions euros)'})
 
 
-    for column in df.iloc[:,:18].columns:
-        df[column] = df[column].str.replace(' ','')
+    #For the columns from 0 to 17:
+    #Delete the spaces between number
+    #Replace NaN values
+    #Convert str values to int
+    for column in df.iloc[:, :18].columns:
+        df[column] = df[column].str.replace(' ', '')
         df[column] = df[column].fillna(0)
         df[column] = df[column].astype(int)
 
-    
-    for column in df.iloc[:,18:].columns:
-        df[column] = df[column].str.replace('%','')
+    #For the columns from 18 to the end:
+    #Delete the % symbols
+    #Replace NaN values
+    #Convert str values to float
+    #Divide values per 100 to get proportions
+    for column in df.iloc[:, 18:].columns:
+        df[column] = df[column].str.replace('%', '')
         df[column] = df[column].fillna(0)
         df[column] = df[column].astype(float)
         df[column] = df[column]/100
 
     return df
-    
 
-directory_name = 'data'
-data_paths = get_path(directory_name)
 
-gambling_market = create_dataset(data_paths, 0)
-clean_gambling_market = preprocess_gambling_market_dataset(gambling_market)
-
-most_bet_on_matches = create_dataset(data_paths, 1)
