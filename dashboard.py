@@ -25,24 +25,43 @@ def create_xls_file(df: pd.DataFrame) -> None:
     with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
         df.to_excel(writer, sheet_name='data', index=True)
         wb = writer.book
-        sheet = wb.add_worksheet('dashboard')
+        dashboard = wb.add_worksheet('dashboard')
 
-        #Chart 1
+        data = wb.get_worksheet_by_name('data')
+
+        column_length = [len(str(column)) for column in df.columns]
+
+        for i, width in enumerate(column_length):
+            data.set_column(i+1, i+1, width + 5)
+        
+        
+
+        # Chart 1
         create_chart(wb, 'line',
                      {'name': '=data!$B$1',
                       'categories': '=data!$A$2:$A$14',
                       'values': '=data!$B$2:$B$14'},
-                     sheet, 'B2',
+                     dashboard, 'B2',
                      title="Évolution du nombre d'opérateurs",
                      xlabel='Année',
                      ylabel="Nombre d'opérateurs",
-          
+
                      size=(720, 456))
-        #Chart 2
-        #Chart 3
-        #Chart 4
-        #Chart 5
-        
+        # Chart 2
+        create_chart(wb, 'line',
+                     {'name': '=data!$B$1',
+                      'categories': '=data!$A$2:$A$14',
+                      'values': '=data!$B$2:$B$14'},
+                     dashboard, 'B2',
+                     title="Évolution du nombre d'opérateurs",
+                     xlabel='Année',
+                     ylabel="Nombre d'opérateurs",
+
+                     size=(720, 456))
+
+        # Chart 3
+        # Chart 4
+        # Chart 5
 
 
 def create_chart(book: xls.Workbook,

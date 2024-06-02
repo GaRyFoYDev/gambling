@@ -32,7 +32,7 @@ def get_path(name: str) -> list:
     return data_path
 
 
-def create_dataset(paths: list, index: int) -> pd.DataFrame:
+def create_dataset(path:str) -> pd.DataFrame:
     """ This function creates a pandas dataframe with the csv file provided.
 
     Args:
@@ -44,10 +44,10 @@ def create_dataset(paths: list, index: int) -> pd.DataFrame:
     """
 
     try:
-        data = pd.read_csv(paths[index], sep=';')
+        data = pd.read_csv(path, sep=';')
         return data
     except UnicodeDecodeError:
-        data = pd.read_csv(paths[index], sep=';', encoding='latin-1')
+        data = pd.read_csv(path, sep=';', encoding='latin-1')
         return data
 
 
