@@ -14,6 +14,7 @@ from pathlib import Path
 
 
 def get_path(name: str) -> list:
+
     """The function creates a list of all files in the data directory and returns.
     a list of them.
 
@@ -23,6 +24,7 @@ def get_path(name: str) -> list:
     Returns:
         list: The function return a list of the path for all file the data directory.
     """
+
     directory = Path(name)
     if directory.exists() and directory.is_dir():
         files = directory.rglob('*')
@@ -31,6 +33,7 @@ def get_path(name: str) -> list:
 
 
 def create_dataset(paths: list, index: int) -> pd.DataFrame:
+
     """ This function creates a pandas dataframe with the csv file provided.
 
     Args:
@@ -40,6 +43,7 @@ def create_dataset(paths: list, index: int) -> pd.DataFrame:
     Returns:
         pd.DataFrame: A DataFrame containing the data from the specified CSV file.
     """
+
     try:
         data = pd.read_csv(paths[index], sep=';')
         return data
@@ -49,6 +53,14 @@ def create_dataset(paths: list, index: int) -> pd.DataFrame:
 
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
+    
+    """
+    Args:
+        df (pd.DataFrame): _description_
+
+    Returns:
+        pd.DataFrame: _description_
+    """
 
     # Set index
     df = df.set_index('Catégorie/Année')

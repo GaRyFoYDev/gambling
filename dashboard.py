@@ -15,6 +15,11 @@ import xlsxwriter as xls
 
 
 def create_xls_file(df: pd.DataFrame):
+    """_summary_
+
+    Args:
+        df (pd.DataFrame): _description_
+    """
 
     with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
         df.to_excel(writer, sheet_name='data', index=True)
@@ -26,10 +31,9 @@ def create_xls_file(df: pd.DataFrame):
                       'categories': '=data!$A$2:$A$14',
                       'values': '=data!$B$2:$B$14'
                       },
-                     sheet, 'B2', title="Evolution du nombre d'opérateurs")
-
-
-
+                     sheet, 'B2',
+                     title="Evolution du nombre d'opérateurs",
+                     xlabel='Année')
 
 
 def create_chart(book: xls.Workbook,
@@ -41,6 +45,18 @@ def create_chart(book: xls.Workbook,
                  xlabel=None,
                  ylabel=None
                  ):
+    """_summary_
+
+    Args:
+        book (xls.Workbook): _description_
+        type (str): _description_
+        values (dict): _description_
+        sheet (xls.Workbook.worksheet_class): _description_
+        insert_area (str): _description_
+        title (_type_, optional): _description_. Defaults to None.
+        xlabel (_type_, optional): _description_. Defaults to None.
+        ylabel (_type_, optional): _description_. Defaults to None.
+    """
 
     chart = book.add_chart({'type': type})
     chart.add_series(values)
