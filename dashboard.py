@@ -12,9 +12,10 @@
 
 import pandas as pd
 import xlsxwriter as xls
+from typing import Union, Tuple
 
 
-def create_xls_file(df: pd.DataFrame):
+def create_xls_file(df: pd.DataFrame) -> None:
     """_summary_
 
     Args:
@@ -26,14 +27,22 @@ def create_xls_file(df: pd.DataFrame):
         wb = writer.book
         sheet = wb.add_worksheet('dashboard')
 
+        #Chart 1
         create_chart(wb, 'line',
                      {'name': '=data!$B$1',
                       'categories': '=data!$A$2:$A$14',
-                      'values': '=data!$B$2:$B$14'
-                      },
+                      'values': '=data!$B$2:$B$14'},
                      sheet, 'B2',
-                     title="Evolution du nombre d'opérateurs",
-                     xlabel='Année')
+                     title="Évolution du nombre d'opérateurs",
+                     xlabel='Année',
+                     ylabel="Nombre d'opérateurs",
+          
+                     size=(720, 456))
+        #Chart 2
+        #Chart 3
+        #Chart 4
+        #Chart 5
+        
 
 
 def create_chart(book: xls.Workbook,
@@ -41,10 +50,11 @@ def create_chart(book: xls.Workbook,
                  values: dict,
                  sheet: xls.Workbook.worksheet_class,
                  insert_area: str,
-                 title=None,
-                 xlabel=None,
-                 ylabel=None
-                 ):
+                 title=Union[None, str],
+                 xlabel=Union[None, str],
+                 ylabel=Union[None, str],
+                 size=Union[None, Tuple[int, int]]
+                 ) -> None:
     """_summary_
 
     Args:
@@ -53,9 +63,10 @@ def create_chart(book: xls.Workbook,
         values (dict): _description_
         sheet (xls.Workbook.worksheet_class): _description_
         insert_area (str): _description_
-        title (_type_, optional): _description_. Defaults to None.
-        xlabel (_type_, optional): _description_. Defaults to None.
-        ylabel (_type_, optional): _description_. Defaults to None.
+        title (_type_, optional): _description_. Defaults to Union[None,str].
+        xlabel (_type_, optional): _description_. Defaults to Union[None,str].
+        ylabel (_type_, optional): _description_. Defaults to Union[None,str].
+        size (_type_, optional): _description_. Defaults to Union[None,Tuple[int,int]].
     """
 
     chart = book.add_chart({'type': type})
@@ -70,3 +81,6 @@ def create_chart(book: xls.Workbook,
 
     if ylabel:
         chart.set_y_axis({"name": ylabel})
+
+    if size:
+        chart.set_size({'width': size[0], 'height': size[1]})

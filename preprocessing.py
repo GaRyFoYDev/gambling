@@ -14,7 +14,6 @@ from pathlib import Path
 
 
 def get_path(name: str) -> list:
-
     """The function creates a list of all files in the data directory and returns.
     a list of them.
 
@@ -29,11 +28,11 @@ def get_path(name: str) -> list:
     if directory.exists() and directory.is_dir():
         files = directory.rglob('*')
         data_path = [str(file) for file in files if file.is_file()]
-        return data_path
+
+    return data_path
 
 
 def create_dataset(paths: list, index: int) -> pd.DataFrame:
-
     """ This function creates a pandas dataframe with the csv file provided.
 
     Args:
@@ -53,7 +52,6 @@ def create_dataset(paths: list, index: int) -> pd.DataFrame:
 
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
-    
     """
     Args:
         df (pd.DataFrame): _description_
@@ -72,7 +70,7 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     df = df.iloc[:, :33]
 
     # Get only years from the indexes and replace
-    new_indexes = [date[-4:] for date in df.index]
+    new_indexes = pd.Index([date[-4:] for date in df.index])
     df.index = new_indexes
 
     df.index = df.index.astype(int)
@@ -89,21 +87,20 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         'PBJ poker (en M)': 'PBJ poker (en millions euros)',
         'Budget marketing médias (en M)': 'Budget marketing médias (en millions euros)'})
 
-
-    #For the columns from 0 to 17:
-    #Delete the spaces between number
-    #Replace NaN values
-    #Convert str values to int
+    # For the columns from 0 to 17:
+    # Delete the spaces between number
+    # Replace NaN values
+    # Convert str values to int
     for column in df.iloc[:, :18].columns:
         df[column] = df[column].str.replace(' ', '')
         df[column] = df[column].fillna(0)
         df[column] = df[column].astype(int)
 
-    #For the columns from 18 to the end:
-    #Delete the % symbols
-    #Replace NaN values
-    #Convert str values to float
-    #Divide values per 100 to get proportions
+    # For the columns from 18 to the end:
+    # Delete the % symbols
+    # Replace NaN values
+    # Convert str values to float
+    # Divide values per 100 to get proportions
     for column in df.iloc[:, 18:].columns:
         df[column] = df[column].str.replace('%', '')
         df[column] = df[column].fillna(0)
@@ -111,5 +108,3 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         df[column] = df[column]/100
 
     return df
-
-
