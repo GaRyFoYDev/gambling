@@ -9,11 +9,10 @@
 # Email: gary.foy.auditeur@lecnam.net                                        #
 ##############################################################################
 
-import dashboard as dash
-import preprocessing as prep
+import scripts.dashboard as dash
+import scripts.preprocessing as prep
 
 if __name__ == '__main__':
-
     directory_name = 'data'
     data_path = prep.get_path(directory_name)
 

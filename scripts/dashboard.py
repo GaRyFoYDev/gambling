@@ -22,7 +22,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
         df (pd.DataFrame): _description_
     """
 
-    with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
+    with pd.ExcelWriter('xlsx/gambling.xlsx', engine='xlsxwriter') as writer:
         df.to_excel(writer, sheet_name='data', index=True)
         wb = writer.book
         dashboard = wb.add_worksheet('dashboard')
@@ -33,46 +33,60 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
         for i, width in enumerate(column_length):
             data.set_column(i+1, i+1, width + 5)
-        
-        
 
-        # Chart 1
+        # Chart 1: Évolution des opérateurs
+        chart1_series1 = {'name': '=data!$B$1',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$B$2:$B$14'}
+
         create_chart(wb, 'line',
-                     {'name': '=data!$B$1',
-                      'categories': '=data!$A$2:$A$14',
-                      'values': '=data!$B$2:$B$14'},
                      dashboard, 'B2',
+                     chart1_series1,
                      title="Évolution du nombre d'opérateurs",
                      xlabel='Année',
                      ylabel="Nombre d'opérateurs",
-
                      size=(720, 456))
-        # Chart 2
-        create_chart(wb, 'line',
-                     {'name': '=data!$B$1',
-                      'categories': '=data!$A$2:$A$14',
-                      'values': '=data!$B$2:$B$14'},
-                     dashboard, 'B2',
-                     title="Évolution du nombre d'opérateurs",
+
+        # Chart 2 - Répartition des agréments
+        chart2_series1 = {'name': 'Paris sportifs',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$D$2:$D$14'}
+
+        chart2_series2 = {'name': 'Paris hippiques',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$E$2:$E$14'}
+
+        chart2_series3 = {'name': 'Paris hippiques',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$F$2:$F$14'}
+
+        create_chart(wb, 'column',
+                     dashboard, 'B28',
+                     chart2_series1,
+                     chart2_series2,
+                     chart2_series3,
+                     title="Évolution du nombre d'agrément accordé par secteur",
                      xlabel='Année',
-                     ylabel="Nombre d'opérateurs",
+                     ylabel="Nombre d'agréments accordés",
+                     size=(720, 456),
 
-                     size=(720, 456))
+                     )
 
-        # Chart 3
-        # Chart 4
+        # Chart 3 - Répartion des CJA
+
+        # Chart 4 - Comparaison de l'évolution des mises
         # Chart 5
 
 
 def create_chart(book: xls.Workbook,
                  type: str,
-                 values: dict,
                  sheet: xls.Workbook.worksheet_class,
                  insert_area: str,
-                 title=Union[None, str],
-                 xlabel=Union[None, str],
-                 ylabel=Union[None, str],
-                 size=Union[None, Tuple[int, int]]
+                 *series: dict,
+                 title: Union[None, str] = None,
+                 xlabel: Union[None, str] = None,
+                 ylabel: Union[None, str] = None,
+                 size: Union[None, Tuple[int, int]] = None,
                  ) -> None:
     """_summary_
 
@@ -89,7 +103,10 @@ def create_chart(book: xls.Workbook,
     """
 
     chart = book.add_chart({'type': type})
-    chart.add_series(values)
+
+    for serie in series:
+        chart.add_series(serie)
+
     sheet.insert_chart(insert_area, chart)
 
     if title:

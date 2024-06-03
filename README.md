@@ -1,48 +1,35 @@
-# Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France
-
-- [Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France](#analyse-du-chiffre-daffaires-des-jeux-en-ligne-agréés-par-lanj-en-france)
-  - [Description du projet](#description-du-projet)
-  - [Installation](#installation)
-  - [Utilisation](#utilisation)
-  - [Données](#données)
-  - [Analyse](#analyse)
-  - [Résultats](#résultats)
-  - [Contact](#contact)
-
-
-
-## Description du projet
-Ce projet vise à analyser les données sur le chiffre d'affaires généré par les jeux en ligne agréés par l'ANJ en France, incluant les paris sportifs, les paris hippiques et le poker. L'analyse comprend l'extraction, le nettoyage et la visualisation des données afin de comprendre les tendances et les performances du marché des jeux en ligne dans le pays.
-
-## Installation
-1. Cloner ce dépôt sur votre machine locale.
-2. Installer les dépendances requises en exécutant `pip install -r requirements.txt`.
-
-## Utilisation
-1. Télécharger les données à partir du site de [l'Autorité Nationale des Jeux](https://anj.fr/open-data-anj).
-2. Placer les fichiers de données dans le répertoire `data/`.
-3. Exécuter le script `main.py` pour démarrer l'analyse.
-
-   ```bash
-   python main.py
-   ```
+## Cloner le projet
+1. Ouvrez votre terminal depuis le dossier de choix.
+2. Cloner le projet en exécutant la commande: 
    
+```bash
 
-## Données
-Les données utilisées dans ce projet sont fournies par data.gouv.fr. Elles comprennent des informations sur le chiffre d'affaires quotidien des paris sportifs, des paris hippiques et du poker en ligne en France, ainsi que des données contextuelles telles que la date et le type de jeu.
+  git clone https://github.com/GaRyFoYDev/honeymoon.git
 
-## Analyse
-L'analyse des données comprend les étapes suivantes :
-- Nettoyage des données pour supprimer les valeurs manquantes et les anomalies.
-- Agrégation des données pour calculer le chiffre d'affaires total par période.
-- Visualisation des tendances temporelles et des performances des différentes catégories de jeux en ligne.
+```
 
-## Résultats
-Les principaux résultats de l'analyse sont les suivants :
-- [Insights principaux tirés de l'analyse des données]
-- [Graphiques représentant les tendances du chiffre d'affaires]
-- [Conclusions sur les performances du marché des jeux en ligne]
+## Installer les dépendances du projet
+1. Ouvrez votre terminal depuis le dossier racine du projet.
+2. Installer les dépendances requises en exécutant la commande: 
+   
+```bash
+
+  pip install -r requirements.txt
+
+```
+
+## Documentation
+1. Ouvrez votre terminal depuis le dossier racine du projet.
+2. Visualiser la documentation exécutant la commande:
+
+```bash
+
+  mkdocs serve
+
+```
 
 
-## Contact
-Pour toute question ou commentaire, veuillez contacter [Gary FOY](mailto:garyfoy@hotmail.fr).
+
+
+
+
