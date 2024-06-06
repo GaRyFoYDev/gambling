@@ -1,12 +1,10 @@
-# Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France
 
-- [Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France](#analyse-du-chiffre-daffaires-des-jeux-en-ligne-agréés-par-lanj-en-france)
-  - [Description du projet](#description-du-projet)
-  - [Utilisation](#utilisation)
-  - [Données](#données)
-  - [Analyse](#analyse)
-  - [Résultats](#résultats)
-  - [Contact](#contact)
+- [Description du projet](#description-du-projet)
+- [Utilisation](#utilisation)
+- [Données](#données)
+- [Analyse](#analyse)
+- [Résultats](#résultats)
+- [Contact](#contact)
 
 
 

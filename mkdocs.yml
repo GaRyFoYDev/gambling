@@ -1,1 +1,4 @@
-site_name: My Docs
+site_name: Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France
+
+theme:
+  name: readthedocs
