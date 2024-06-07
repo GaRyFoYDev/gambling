@@ -111,10 +111,4 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def compute_data(df: pd.DataFrame, columns: list, compute: str, name: str) -> pd.DataFrame:
-    if compute == 'mean':
-        df[name] = df[columns].mean(axis=1).astype(int)
-        return df
-    elif compute == 'sum':
-        df[name] = df[columns].sum(axis=1).astype(int)
-        return df
+
