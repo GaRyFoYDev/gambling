@@ -125,11 +125,11 @@ def create_xls_file(df: pd.DataFrame) -> None:
         dashboard = wb.add_worksheet('dashboard')
         data = wb.get_worksheet_by_name('data')
 
-        # Gérer la taille des colonnes du sheet data
+        # Column must adapt to value length
         autosize(df, data)
 
-        # Sheet Général
-        # Chart 1: Évolution des opérateurs / Général
+        # Dashboard
+        # Chart 1
         create_chart(wb, 'line',
                      dashboard, 'B2',
                      chart1_series1,
@@ -138,7 +138,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      ylabel="Nombre d'opérateurs",
                      size=(720, 456))
 
-        # Chart 2 - Répartition des agréments / Général
+        # Chart 2
         create_chart(wb, 'column',
                      dashboard, 'B28',
                      chart2_series1,
@@ -151,7 +151,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
                      )
 
-        # Chart 3 - Répartion des CJA / Général
+        # Chart 3
         create_chart(wb, 'column',
                      dashboard, 'N2',
                      chart3_series1,
@@ -162,7 +162,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      ylabel="Nombre de CJA",
                      size=(720, 456))
 
-        # Chart 4 - Comparaison de l'évolution des mises / Général
+        # Chart 4
         create_chart(wb, 'line',
                      dashboard, 'N28',
                      chart4_series1,

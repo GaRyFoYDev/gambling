@@ -10,6 +10,7 @@
 ##############################################################################
 
 import pandas as pd
+import numpy as np
 from pathlib import Path
 
 
@@ -32,7 +33,7 @@ def get_path(name: str) -> list:
     return data_path
 
 
-def create_dataset(path:str) -> pd.DataFrame:
+def create_dataset(path: str) -> pd.DataFrame:
     """ This function creates a pandas dataframe with the csv file provided.
 
     Args:
@@ -108,3 +109,12 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         df[column] = df[column]/100
 
     return df
+
+
+def compute_data(df: pd.DataFrame, columns: list, compute: str, name: str) -> pd.DataFrame:
+    if compute == 'mean':
+        df[name] = df[columns].mean(axis=1).astype(int)
+        return df
+    elif compute == 'sum':
+        df[name] = df[columns].sum(axis=1).astype(int)
+        return df
