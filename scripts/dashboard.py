@@ -55,9 +55,19 @@ chart4_series3 = {'name': 'Poker',
                           'categories': '=data!$A$2:$A$14',
                           'values': '=data!$P$2:$P$14'}
 
-char1_ps = {'name': 'Paris Sport',
-            'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$P$2:$P$14'}
+chart5_series1 = {'name': 'Paris sportifs',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$M$2:$M$14'}
+
+chart5_series2 = {'name': 'Paris hippiques',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$O$2:$O$14'}
+
+chart5_series3 = {'name': 'Poker',
+                          'categories': '=data!$A$2:$A$14',
+                          'values': '=data!R$2:$R$14'}
+
+
 
 cja_lst = ['Nombre CJA Paris sportifs',
            'Nombre CJA Paris hippiques',
@@ -71,6 +81,7 @@ mise_lst = ['Mises paris sportifs (en millions euros)',
 pbj_lst = ['PBJ paris sportifs (en millions euros)',
            'PBJ paris hippiques (en millions euros)',
            'PBJ poker (en millions euros)']
+
 
 #####################################################################################
 
@@ -125,13 +136,15 @@ def autosize(df: pd.DataFrame, sheet: xls.worksheet.Worksheet) -> None:
         sheet.set_column(i+1, i+1, width + 5)
 
 
-def compute_data(df: pd.DataFrame, columns: list, compute: str, name: str) -> pd.Series:
+def compute_data(df: pd.DataFrame, columns: list,compute: str = 'sum') -> pd.Series:
     if compute == 'mean':
         res = df[columns].mean(axis=1).astype(int)
         return res
     elif compute == 'sum':
         res = df[columns].mean(axis=1).astype(int)
         return res
+    else:
+        raise ValueError('Please type in a valid value: mean or sum')
 
 
 def create_xls_file(df: pd.DataFrame) -> None:
@@ -162,7 +175,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
         # Chart 2
         create_chart(wb, 'column',
-                     dashboard, 'B28',
+                     dashboard, 'F2',
                      chart2_series1,
                      chart2_series2,
                      chart2_series3,
@@ -175,7 +188,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
         # Chart 3
         create_chart(wb, 'column',
-                     dashboard, 'F2',
+                     dashboard, 'J2',
                      chart3_series1,
                      chart3_series2,
                      chart3_series3,
@@ -186,7 +199,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
         # Chart 4
         create_chart(wb, 'line',
-                     dashboard, 'F28',
+                     dashboard, 'B28',
                      chart4_series1,
                      chart4_series2,
                      chart4_series3,
@@ -194,24 +207,46 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      xlabel='Année',
                      ylabel="Montant en M€",
                      size=(720, 456))
+        
+        # Chart 5
+        create_chart(wb, 'line',
+                     dashboard, 'F28',
+                     chart5_series1,
+                     chart5_series2,
+                     chart5_series3,
+                     title="Évolution du prduit brut des jeux (PBJ)",
+                     xlabel='Année',
+                     ylabel="Montant en M€",
+                     size=(720, 456))
 
-        data2 = compute_data(df, cja_lst, 'mean', 'Moyenne CJA')
-        data1 = compute_data(df, mise_lst, 'sum',
-                             'Total des mises en millions euros')
-        data3 = compute_data(df, pbj_lst, 'sum',
-                             'Total du PBJ en millions euros')
+        # Calculating mean or sum
+        pd_series1 = compute_data(df, cja_lst, 'mean')
+        pd_series2  = compute_data(df, mise_lst)
+        pd_series3  = compute_data(df, pbj_lst)
+        
+        
+        #Getting PBJ/Mise ratio
+        pd_series4  = pd_series3 /pd_series2 *100
+        pd_series4  = pd_series4.astype(float).round(1)
+       
+        # Creating df from 4 series
+        df2 = pd.concat([pd_series1, pd_series2, pd_series3,pd_series4], axis=1)
 
-        df2 = pd.concat([data1, data2, data3], axis=1)
+       
+        # Converting our df to a matrix
         df2_lst = []
         for index, row in df2.iterrows():
-            line = [index, row[0], row[1], row[2]]
+            line = [index, row[0], row[1], row[2],row[3]]
             df2_lst.append(line)
 
-        dashboard.add_table('B52:E64', {'data': df2_lst,
+        # Creating a table from our list
+        dashboard.add_table('B54:E66', {'data': df2_lst,
                                         'columns': [{'header': 'Année'},
                                                     {'header': 'Moyenne CJA'},
-                                                    {'header': 'Total des mises en millions euros'},
-                                                    {'header': 'Total du PBJ en millions euros'}]})
+                                                    {'header': 'Total des mises (en millions euros)'},
+                                                    {'header': 'Total du PBJ (en millions euros)'},
+                                                    {'header': 'PBJ / Mise (en %)'}],
+                                                    'autofilter': False})
 
-        # Column must adapt to value length
+        # Autosize the dashboard
         autosize(df, dashboard)
