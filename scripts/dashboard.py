@@ -17,11 +17,13 @@ from typing import Union, Tuple
 
 chart1_series1 = {'name': '=data!$B$1',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$B$2:$B$14'}
+                          'values': '=data!$B$2:$B$14',
+                          'marker': {'type': 'diamond'}}
 
 chart2_series1 = {'name': 'Paris sportifs',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$D$2:$D$14'}
+                          'values': '=data!$D$2:$D$14'
+                  }
 
 chart2_series2 = {'name': 'Paris hippiques',
                           'categories': '=data!$A$2:$A$14',
@@ -45,28 +47,40 @@ chart3_series3 = {'name': 'Poker',
 
 chart4_series1 = {'name': 'Paris sportifs',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$L$2:$L$14'}
+                          'values': '=data!$L$2:$L$14',
+                          'marker': {'type': 'diamond'}}
 
 chart4_series2 = {'name': 'Paris hippiques',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$N$2:$N$14'}
+                          'values': '=data!$N$2:$N$14',
+                          'marker': {'type': 'diamond'}}
 
 chart4_series3 = {'name': 'Poker',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$P$2:$P$14'}
+                          'values': '=data!$P$2:$P$14',
+                          'marker': {'type': 'diamond'}}
 
 chart5_series1 = {'name': 'Paris sportifs',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$M$2:$M$14'}
+                          'values': '=data!$M$2:$M$14',
+                          'marker': {'type': 'diamond'}}
 
 chart5_series2 = {'name': 'Paris hippiques',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!$O$2:$O$14'}
+                          'values': '=data!$O$2:$O$14',
+                          'marker': {'type': 'diamond'}}
 
 chart5_series3 = {'name': 'Poker',
                           'categories': '=data!$A$2:$A$14',
-                          'values': '=data!R$2:$R$14'}
+                          'values': '=data!R$2:$R$14',
+                          'marker': {'type': 'diamond'}}
 
+chart6_series1 = {
+    'categories': '=dashboard!$A$500:$A$503',
+    'values': '=dashboard!B$500:$B$503',
+    'data_labels': {'percentage': True,
+                    'font': {'size': 14},
+                    'position': 'outside_end'}}
 
 
 cja_lst = ['Nombre CJA Paris sportifs',
@@ -81,6 +95,10 @@ mise_lst = ['Mises paris sportifs (en millions euros)',
 pbj_lst = ['PBJ paris sportifs (en millions euros)',
            'PBJ paris hippiques (en millions euros)',
            'PBJ poker (en millions euros)']
+
+sports_lst = ['Part mises football',
+              'Part mises tennis',
+              'Part mises basketball']
 
 
 #####################################################################################
@@ -136,12 +154,15 @@ def autosize(df: pd.DataFrame, sheet: xls.worksheet.Worksheet) -> None:
         sheet.set_column(i+1, i+1, width + 5)
 
 
-def compute_data(df: pd.DataFrame, columns: list,compute: str = 'sum') -> pd.Series:
+def compute_data(df: pd.DataFrame, columns: list, compute: str = 'sum') -> pd.Series:
     if compute == 'mean':
         res = df[columns].mean(axis=1).astype(int)
         return res
     elif compute == 'sum':
         res = df[columns].mean(axis=1).astype(int)
+        return res
+    elif compute == 'mean_col':
+        res = df[columns].mean().round(2)
         return res
     else:
         raise ValueError('Please type in a valid value: mean or sum')
@@ -207,7 +228,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      xlabel='Année',
                      ylabel="Montant en M€",
                      size=(720, 456))
-        
+
         # Chart 5
         create_chart(wb, 'line',
                      dashboard, 'F28',
@@ -221,22 +242,21 @@ def create_xls_file(df: pd.DataFrame) -> None:
 
         # Calculating mean or sum
         pd_series1 = compute_data(df, cja_lst, 'mean')
-        pd_series2  = compute_data(df, mise_lst)
-        pd_series3  = compute_data(df, pbj_lst)
-        
-        
-        #Getting PBJ/Mise ratio
-        pd_series4  = pd_series3 /pd_series2 *100
-        pd_series4  = pd_series4.astype(float).round(1)
-       
-        # Creating df from 4 series
-        df2 = pd.concat([pd_series1, pd_series2, pd_series3,pd_series4], axis=1)
+        pd_series2 = compute_data(df, mise_lst)
+        pd_series3 = compute_data(df, pbj_lst)
 
-       
+        # Getting PBJ/Mise ratio
+        pd_series4 = pd_series3 / pd_series2 * 100
+        pd_series4 = pd_series4.astype(float).round(1)
+
+        # Creating df from 4 series
+        df2 = pd.concat(
+            [pd_series1, pd_series2, pd_series3, pd_series4], axis=1)
+
         # Converting our df to a matrix
         df2_lst = []
         for index, row in df2.iterrows():
-            line = [index, row[0], row[1], row[2],row[3]]
+            line = [index, row[0], row[1], row[2], row[3]]
             df2_lst.append(line)
 
         # Creating a table from our list
@@ -246,7 +266,21 @@ def create_xls_file(df: pd.DataFrame) -> None:
                                                     {'header': 'Total des mises (en millions euros)'},
                                                     {'header': 'Total du PBJ (en millions euros)'},
                                                     {'header': 'PBJ / Mise (en %)'}],
-                                                    'autofilter': False})
+                                        'autofilter': False})
+
+        # Getting sport repartition
+        pd_series5 = compute_data(df, sports_lst, 'mean_col')
+        pd_series5['Autres sports'] = 1 - pd_series5.sum()
+
+        dashboard.write_column("A500", list(pd_series5.index))
+        dashboard.write_column("B500", list(pd_series5.values))
+
+        # Chart 2
+        create_chart(wb, 'pie',
+                     dashboard, 'J28',
+                     chart6_series1,
+                     title="Répartition des mises en fonction des sports",
+                     size=(720, 456))
 
         # Autosize the dashboard
         autosize(df, dashboard)
