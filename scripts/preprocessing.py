@@ -108,7 +108,21 @@ def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
         df[column] = df[column].astype(float)
         df[column] = df[column]/100
 
+    # Calcul de la moyenne des différentes colonnes et multiplication par 100
+    df['Moyenne répartition mise homme (en %)'] = (df[['Part hommes PS T4',
+                                                       'Part hommes PH T4',
+                                                       'Part hommes PO T4']].mean(axis=1) * 100).astype(float).round(1)
+
+    df['Moyenne répartition mise femme (en %)'] = (df[['Part femmes PS T4',
+                                                       'Part femmes PH T4',
+                                                       'Part femmes PO T4']].mean(axis=1) * 100).astype(float).round(1)
+
+    df['Moyenne répartition mise smartphone et tablette (en %)'] = (df[['Part mises smartphones et tablettes PS T4',
+                                                                        'Part mises smartphones et tablettes PH T4',
+                                                                        'Part mises smartphones et tablettes PO T4']].mean(axis=1) * 100).astype(float).round(1)
+
+    df['Moyenne répartition mise ordinateur (en %)'] = (df[['Part mises ordinateur PS T4',
+                                                            'Part mises ordinateur PH T4',
+                                                            'Part mises ordinateur PO T4']].mean(axis=1) * 100).astype(float).round(1)
+
     return df
-
-
-

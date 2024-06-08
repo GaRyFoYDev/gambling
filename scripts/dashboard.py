@@ -82,6 +82,22 @@ chart6_series1 = {
                     'font': {'size': 14},
                     'position': 'outside_end'}}
 
+chart7_series1 = {'name': 'Hommes',
+                  'categories': '=data!$A$2:$A$14',
+                  'values': '=data!$AI$2:$AI$14',
+                  }
+chart7_series2 = {'name': 'Femmes',
+                  'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$AJ$2:$AJ$14'}
+
+chart8_series1 = {'name': 'Smartphones & Tablettes',
+                  'categories': '=data!$A$2:$A$14',
+                  'values': '=data!$AK$2:$AK$14',
+                  }
+chart8_series2 = {'name': 'Ordinateurs',
+                  'categories': '=data!$A$2:$A$14',
+                          'values': '=data!$AL$2:$AL$14'}
+
 
 cja_lst = ['Nombre CJA Paris sportifs',
            'Nombre CJA Paris hippiques',
@@ -113,6 +129,7 @@ def create_chart(book: xls.Workbook,
                  xlabel: Union[None, str] = None,
                  ylabel: Union[None, str] = None,
                  size: Union[None, Tuple[int, int]] = None,
+                 subtype: Union[None, str] = None,
                  ) -> None:
     """_summary_
 
@@ -127,7 +144,7 @@ def create_chart(book: xls.Workbook,
         size (Union[None, Tuple[int, int]], optional): _description_. Defaults to None.
     """
 
-    chart = book.add_chart({'type': type})
+    chart = book.add_chart({'type': type, 'subtype': subtype})
 
     for serie in series:
         chart.add_series(serie)
@@ -139,6 +156,7 @@ def create_chart(book: xls.Workbook,
 
     if xlabel:
         chart.set_x_axis({"name": xlabel,
+                          'min': 0,
                           'num_font':  {'rotation': 45,
                                         'size': 13},
                           'name_font':  {'size': 14}
@@ -146,12 +164,16 @@ def create_chart(book: xls.Workbook,
 
     if ylabel:
         chart.set_y_axis({"name": ylabel,
+                          'min': 0,
                           'num_font':  {'size': 13},
                           'name_font':  {'size': 14}
                           })
 
     if size:
         chart.set_size({'width': size[0], 'height': size[1]})
+
+    chart.set_legend({
+        'font': {'size': 12}})
 
 
 def autosize(df: pd.DataFrame, sheet: xls.worksheet.Worksheet) -> None:
@@ -247,7 +269,7 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      ylabel="Montant en M€",
                      size=(720, 456))
 
-        # Calculating mean or sum
+        # Computing data we need
         pd_series1 = compute_data(df, cja_lst, 'mean')
         pd_series2 = compute_data(df, mise_lst)
         pd_series3 = compute_data(df, pbj_lst)
@@ -282,12 +304,33 @@ def create_xls_file(df: pd.DataFrame) -> None:
         dashboard.write_column("A500", list(pd_series5.index))
         dashboard.write_column("B500", list(pd_series5.values))
 
-        # Chart 2
+        # Chart 6
         create_chart(wb, 'pie',
                      dashboard, 'J28',
                      chart6_series1,
                      title="Répartition des mises en fonction des sports",
                      size=(720, 456))
+        # Chart 7
+        create_chart(wb, 'bar',
+                     dashboard, 'B69',
+                     chart7_series1,
+                     chart7_series2,
+                     title="Répartition mise hommes vs femmes",
+                     xlabel='Année',
+                     ylabel="Proportion (en %)",
+                     size=(720, 456),
+                     subtype='percent_stacked')
+        # Chart 8
+        create_chart(wb, 'bar',
+                     dashboard, 'F69',
+                     chart8_series1,
+                     chart8_series2,
+                     title="Répartition mise smartphone/tablette vs ordinateur",
+                     xlabel='Année',
+                     ylabel="Proportion (en %)",
+                     size=(720, 456),
+                     subtype='percent_stacked')
+       
 
         # Autosize the dashboard
         autosize(df, dashboard)
