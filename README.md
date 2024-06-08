@@ -15,7 +15,13 @@
 
 ## Install Project Dependencies
 1. Open your terminal from the cloned project directory.
-2. Install the required dependencies by executing the command:
+2. Activate your virtual environment by typing the command:
+
+```bash
+  source .venv/bin/activate
+```
+
+3. Install the required dependencies by executing the command:
    
 ```bash
   pip install -r requirements.txt
