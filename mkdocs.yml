@@ -1,4 +1,12 @@
-site_name: Analyse du chiffre d'affaires des jeux en ligne agréés par l'ANJ en France
+site_name: 'Excel project docs'
 
 theme:
-  name: readthedocs
+  name: "material"
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - Preprocessing: preprocessing.md
+  -  Dashboard: dashboard.md

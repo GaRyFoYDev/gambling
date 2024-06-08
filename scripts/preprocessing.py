@@ -10,19 +10,17 @@
 ##############################################################################
 
 import pandas as pd
-import numpy as np
 from pathlib import Path
 
 
 def get_path(name: str) -> list:
-    """The function creates a list of all files in the data directory and returns.
-    a list of them.
+    """Retrieves paths of files within the specified directory.
 
     Args:
-        name (str):It refers to the directory name where the files we need are located. 
+        name (str): Name of the directory.
 
     Returns:
-        list: The function return a list of the path for all file the data directory.
+        list: List of file paths within the directory.
     """
 
     directory = Path(name)
@@ -34,14 +32,13 @@ def get_path(name: str) -> list:
 
 
 def create_dataset(path: str) -> pd.DataFrame:
-    """ This function creates a pandas dataframe with the csv file provided.
+    """Creates a pandas DataFrame from the CSV file provided.
 
     Args:
-        paths (list): A list containing all the paths
-        index (int): The index path corresponding to the desired file.
+        path (str): The path to the CSV file.
 
     Returns:
-        pd.DataFrame: A DataFrame containing the data from the specified CSV file.
+        pd.DataFrame: DataFrame containing the data from the specified CSV file.
     """
 
     try:
@@ -53,14 +50,14 @@ def create_dataset(path: str) -> pd.DataFrame:
 
 
 def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
-    """
+    """Preprocesses the DataFrame containing gambling data.
+
     Args:
-        df (pd.DataFrame): _description_
+        df (pd.DataFrame): DataFrame containing the data.
 
     Returns:
-        pd.DataFrame: _description_
+        pd.DataFrame: DataFrame after preprocessing.
     """
-
     # Set index
     df = df.set_index('Catégorie/Année')
 

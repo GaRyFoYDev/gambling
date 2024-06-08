@@ -12,7 +12,6 @@
 
 import pandas as pd
 import xlsxwriter as xls
-import openpyxl as op
 from typing import Union, Tuple
 
 chart1_series1 = {'name': '=data!$B$1',
@@ -131,17 +130,19 @@ def create_chart(book: xls.Workbook,
                  size: Union[None, Tuple[int, int]] = None,
                  subtype: Union[None, str] = None,
                  ) -> None:
-    """_summary_
+    """Creates a chart in the specified workbook, worksheet, and insert area.
 
     Args:
-        book (xls.Workbook): _description_
-        type (str): _description_
-        sheet (xls.Workbook.worksheet_class): _description_
-        insert_area (str): _description_
-        title (Union[None, str], optional): _description_. Defaults to None.
-        xlabel (Union[None, str], optional): _description_. Defaults to None.
-        ylabel (Union[None, str], optional): _description_. Defaults to None.
-        size (Union[None, Tuple[int, int]], optional): _description_. Defaults to None.
+        book (xls.Workbook): The workbook where the chart will be created.
+        type (str): The type of the chart (e.g., 'line', 'bar', 'pie').
+        sheet (xls.worksheet.Worksheet): The worksheet where the chart will be inserted.
+        insert_area (str): The cell range where the chart will be inserted in the worksheet.
+        *series (dict): Series data for the chart. Each dictionary represents a series of data.
+        title (Union[None, str], optional): The title of the chart. Defaults to None.
+        xlabel (Union[None, str], optional): The label for the x-axis. Defaults to None.
+        ylabel (Union[None, str], optional): The label for the y-axis. Defaults to None.
+        size (Union[None, Tuple[int, int]], optional): The size of the chart (width, height). Defaults to None.
+        subtype (Union[None, str], optional): The subtype of the chart (e.g., 'stacked'). Defaults to None.
     """
 
     chart = book.add_chart({'type': type, 'subtype': subtype})
@@ -177,13 +178,32 @@ def create_chart(book: xls.Workbook,
 
 
 def autosize(df: pd.DataFrame, sheet: xls.worksheet.Worksheet) -> None:
+    """Automatically adjusts column widths in an Excel worksheet based on the length of data.
 
+    Args:
+        df (pd.DataFrame): DataFrame containing the data to be written to the Excel worksheet.
+        sheet (xls.worksheet.Worksheet): Worksheet object representing the Excel worksheet.
+    """
     column_length = [len(str(column)) for column in df.columns]
     for i, width in enumerate(column_length):
         sheet.set_column(i+1, i+1, width + 5)
 
 
 def compute_data(df: pd.DataFrame, columns: list, compute: str = 'sum') -> pd.Series:
+    """Computes aggregated values for specified columns in a DataFrame.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the data.
+        columns (list): List of column names on which computations are performed.
+        compute (str, optional): Type of computation to perform. Options: 'sum', 'mean', 'mean_col'.
+            Defaults to 'sum'.
+
+    Raises:
+        ValueError: Raised when an invalid value is provided for the compute parameter.
+
+    Returns:
+        pd.Series: Series containing the computed values.
+    """
     if compute == 'mean':
         res = df[columns].mean(axis=1).astype(int)
         return res
@@ -198,10 +218,10 @@ def compute_data(df: pd.DataFrame, columns: list, compute: str = 'sum') -> pd.Se
 
 
 def create_xls_file(df: pd.DataFrame) -> None:
-    """_summary_
+    """Creates an Excel file with data and corresponding dashboard charts and tables.
 
     Args:
-        df (pd.DataFrame): _description_
+        df (pd.DataFrame): DataFrame containing the data.
     """
 
     with pd.ExcelWriter('gambling.xlsx', engine='xlsxwriter') as writer:
@@ -330,7 +350,6 @@ def create_xls_file(df: pd.DataFrame) -> None:
                      ylabel="Proportion (en %)",
                      size=(720, 456),
                      subtype='percent_stacked')
-       
 
         # Autosize the dashboard
         autosize(df, dashboard)
