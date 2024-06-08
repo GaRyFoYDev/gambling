@@ -1,32 +1,37 @@
-## Cloner le projet
-1. Ouvrez votre terminal depuis le dossier de choix.
-2. Cloner le projet en exécutant la commande: 
+## Clone the project
+1. Open your terminal from the directory of your choice.
+2. Clone the project by executing the following command:
    
 ```bash
-
   git clone https://github.com/GaRyFoYDev/honeymoon.git
+```
+## Create a Virtual environment
+1. Open your terminal from the cloned project directory.
+2. Set up your virtual environment by executing the command: 
 
+```bash
+  python -m venv .venv
 ```
 
-## Installer les dépendances du projet
-1. Ouvrez votre terminal depuis le dossier racine du projet.
-2. Installer les dépendances requises en exécutant la commande: 
+## Install Project Dependencies
+1. Open your terminal from the cloned project directory.
+2. Install the required dependencies by executing the command:
    
 ```bash
-
   pip install -r requirements.txt
-
 ```
 
 ## Documentation
-1. Ouvrez votre terminal depuis le dossier racine du projet.
-2. Visualiser la documentation exécutant la commande:
+1. You can access the documentation in the docs folder of the project.
+2. Alternatively, you can view the documentation by running the following command in your terminal from the project directory:
 
 ```bash
-
   mkdocs serve
-
 ```
+3. Once the server is running, navigate to the documentation page. 
+   
+   ![Documentation](img/docs_img.png)
+ 
 
 
 
