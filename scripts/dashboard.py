@@ -138,10 +138,17 @@ def create_chart(book: xls.Workbook,
         chart.set_title({"name": title})
 
     if xlabel:
-        chart.set_x_axis({"name": xlabel})
+        chart.set_x_axis({"name": xlabel,
+                          'num_font':  {'rotation': 45,
+                                        'size': 13},
+                          'name_font':  {'size': 14}
+                          })
 
     if ylabel:
-        chart.set_y_axis({"name": ylabel})
+        chart.set_y_axis({"name": ylabel,
+                          'num_font':  {'size': 13},
+                          'name_font':  {'size': 14}
+                          })
 
     if size:
         chart.set_size({'width': size[0], 'height': size[1]})
