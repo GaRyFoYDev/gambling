@@ -6,6 +6,9 @@ theme:
 plugins:
   - mkdocstrings
 
+markdown_extensions:
+  - def_list
+
 nav:
   - Home: index.md
   - Preprocessing: preprocessing.md
