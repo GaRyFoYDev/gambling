@@ -36,7 +36,7 @@
 ```
 
 ## Documentation
-1. You can access the documentation in the docs folder of the project.
+1. You can access the documentation by executing the following command in your terminal.
 
 ```bash
   mkdocs serve
